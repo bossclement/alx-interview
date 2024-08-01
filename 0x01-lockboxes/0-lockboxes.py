@@ -4,7 +4,7 @@ Module doc
 """
 
 
-def can_open_all_boxes(boxes):
+def canUnlockAll(boxes):
     """
     Determines if all boxes in a given list can be opened.
 
