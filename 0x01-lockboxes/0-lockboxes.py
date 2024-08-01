@@ -15,15 +15,16 @@ def can_open_all_boxes(boxes):
         True if all boxes can be opened, False otherwise.
     """
 
-    box_count = len(boxes)
-    unlocked_boxes = set()
+    position = 0
+    unlocked = {}
 
-    for index, keys in enumerate(boxes):
-        if not keys or index == 0:
-            unlocked_boxes.add(index)
-        for key in keys:
-            if 0 <= key < box_count and key != index:
-                unlocked_boxes.add(key)
-        if len(unlocked_boxes) == box_count:
+    for box in boxes:
+        if len(box) == 0 or position == 0:
+            unlocked[position] = "always_unlocked"
+        for key in box:
+            if key < len(boxes) and key != position:
+                unlocked[key] = key
+        if len(unlocked) == len(boxes):
             return True
+        position += 1
     return False
