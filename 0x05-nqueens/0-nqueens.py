@@ -1,74 +1,64 @@
 #!/usr/bin/python3
-"""N Queens placement on NxN chessboard"""
+""" N QUEENS ALGORITHM WITH BACKTRACKING (RECURSION INSIDE LOOP)
 
-
+    N-queen problem
+    The next algo solve any N queen in any NxN
+    Being N > 3
+"""
 import sys
 
 
-class NQueen:
-    """ Class for solving N Queen Problem """
-
-    def __init__(self, n):
-        """ Global Variables """
-        self.n = n
-        self.x = [0 for i in range(n + 1)]
-        self.res = []
-
-    def place(self, h, i):
-        """ Checks if h Queen can be placed in i column (True)
-        or if the are attacking queens in row or diagonal (False)
-        """
-
-        # j checks from 1 to h - 1 (Up to previous queen)
-        for j in range(1, h):
-            # There is already a queen in column
-            # or a queen in same diagonal
-            if self.x[j] == i or \
-               abs(self.x[j] - i) == abs(j - h):
-                return 0
-        return 1
-
-    def nQueen(self, h):
-        """ Tries to place every queen in the board
-        Args:
-        h: starting queen from which to evaluate (should be 1)
-        """
-        # i goes from column 1 to column n (1st column is 1st index)
-        for i in range(1, self.n + 1):
-            if self.place(h, i):
-                # Queen can be placed in i column
-                self.x[h] = i
-                if h == self.n:
-                    # Placed all 4 Queens (A solution was found)
-                    solution = []
-                    for i in range(1, self.n + 1):
-                        solution.append([i - 1, self.x[i] - 1])
-                    self.res.append(solution)
-                else:
-                    # Need to place more Queens
-                    self.nQueen(h + 1)
-        return self.res
+def generate_solutions(row, column):
+    solution = [[]]
+    for queen in range(row):
+        solution = place_queen(queen, column, solution)
+    return solution
 
 
-""" Main """
-if len(sys.argv) != 2:
-    print("Usage: nqueens N")
-    sys.exit(1)
+def place_queen(queen, column, prev_solution):
+    safe_position = []
+    for array in prev_solution:
+        for x in range(column):
+            if is_safe(queen, x, array):
+                safe_position.append(array + [x])
+    return safe_position
 
-N = sys.argv[1]
 
-try:
-    N = int(N)
-except ValueError:
-    print("N must be a number")
-    sys.exit(1)
+def is_safe(q, x, array):
+    if x in array:
+        return (False)
+    else:
+        return all(abs(array[column] - x) != q - column
+                   for column in range(q))
 
-if N < 4:
-    print("N must be at least 4")
-    sys.exit(1)
 
-queen = NQueen(N)
-res = queen.nQueen(1)
+def init():
+    if len(sys.argv) != 2:
+        print("Usage: nqueens N")
+        sys.exit(1)
+    if sys.argv[1].isdigit():
+        n = int(sys.argv[1])
+    else:
+        print("N must be a number")
+        sys.exit(1)
+    if n < 4:
+        print("N must be at least 4")
+        sys.exit(1)
+    return (n)
 
-for i in res:
-    print(i)
+
+def n_queens():
+
+    n = init()
+    # generate all solutions
+    solutions = generate_solutions(n, n)
+    # print solutions
+    for array in solutions:
+        clean = []
+        for q, x in enumerate(array):
+            clean.append([q, x])
+        print(clean)
+
+
+if __name__ == '__main__':
+    n_queens()
