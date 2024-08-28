@@ -1,4 +1,3 @@
-
 #!/usr/bin/python3
 """ N Queens placement on NxN chessboard """
 import sys
