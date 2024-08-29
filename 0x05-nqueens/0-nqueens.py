@@ -3,63 +3,60 @@
 import sys
 
 
-class NQueen:
-    """ Class for solving N Queen Problem """
+def n_queen(t_arr, arr, col, i, num):
+    """
+       n_queen - Find all posibles solution for N-queen problem and return it
+             in a list
+       @t_arr: temporaly list to store the all points of a posible solution
+       @arr: store all the solution
+       @col: save a colum use for a queen
+       @i: the row of the chess table
+       @num: Number of queens
+    """
+    if (i > num):
+        arr.append(t_arr[:])
+        return arr
 
-    def __init__(self, n):
-        """ Global Variables """
-        self.n = n
-        self.x = [0 for i in range(n + 1)]
-        self.res = []
+    for j in range(num + 1):
+        if i == 0 or ([i - 1, j - 1] not in t_arr and
+                      [i - 1, j + 1] not in t_arr and
+                      j not in col):
+            if i > 1:
+                dia = 0
+                for k in range(2, i + 1):
+                    if ([i - k, j - k] in t_arr) or ([i - k, j + k] in t_arr):
+                        dia = 1
+                        break
+                if dia:
+                    continue
+            t_arr.append([i, j])
+            col.append(j)
+            n_queen(t_arr, arr, col, i + 1, num)
+            col.pop()
+            t_arr.pop()
 
-    def place(self, h, i):
-        """ Checks if h Queen can be placed in i column (True)
-        or if the are attacking queens in row or diagonal (False)
-        """
-
-        for j in range(1, h):
-            if self.x[j] == i or \
-               abs(self.x[j] - i) == abs(j - h):
-                return 0
-        return 1
-
-    def nQueen(self, h):
-        """ Tries to place every queen in the board
-        Args:
-        h: starting queen from which to evaluate (should be 1)
-        """
-        for i in range(1, self.n + 1):
-            if self.place(h, i):
-                self.x[h] = i
-                if h == self.n:
-                    solution = []
-                    for i in range(1, self.n + 1):
-                        solution.append([i - 1, self.x[i] - 1])
-                    self.res.append(solution)
-                else:
-                    self.nQueen(h + 1)
-        return self.res
+    return arr
 
 
-""" Main """
-if len(sys.argv) != 2:
-    print("Usage: nqueens N")
-    sys.exit(1)
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: nqueens N")
+        exit(1)
 
-N = sys.argv[1]
+    try:
+        num = int(sys.argv[1])
+    except BaseException:
+        print("N must be a number")
+        exit(1)
 
-try:
-    N = int(N)
-except ValueError:
-    print("N must be a number")
-    sys.exit(1)
+    if not isinstance(num, int):
+        print("N must be a number")
+        exit(1)
 
-if N < 4:
-    print("N must be at least 4")
-    sys.exit(1)
+    elif num < 4:
+        print("N must be at least 4")
+        exit(1)
 
-queen = NQueen(N)
-res = queen.nQueen(1)
-
-for i in res:
-    print(i)
+    n_queen_arr = n_queen([], [], [], 0, num - 1)
+    for i in n_queen_arr:
+        print(i)
