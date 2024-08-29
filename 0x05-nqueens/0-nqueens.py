@@ -17,10 +17,7 @@ class NQueen:
         or if the are attacking queens in row or diagonal (False)
         """
 
-        # j checks from 1 to h - 1 (Up to previous queen)
         for j in range(1, h):
-            # There is already a queen in column
-            # or a queen in same diagonal
             if self.x[j] == i or \
                abs(self.x[j] - i) == abs(j - h):
                 return 0
@@ -31,19 +28,15 @@ class NQueen:
         Args:
         h: starting queen from which to evaluate (should be 1)
         """
-        # i goes from column 1 to column n (1st column is 1st index)
         for i in range(1, self.n + 1):
             if self.place(h, i):
-                # Queen can be placed in i column
                 self.x[h] = i
                 if h == self.n:
-                    # Placed all 4 Queens (A solution was found)
                     solution = []
                     for i in range(1, self.n + 1):
                         solution.append([i - 1, self.x[i] - 1])
                     self.res.append(solution)
                 else:
-                    # Need to place more Queens
                     self.nQueen(h + 1)
         return self.res
 
