@@ -1,7 +1,6 @@
 #!/usr/bin/python3
-import sys
-
 """ N Queens placement on NxN chessboard """
+import sys
 
 
 def n_queen(t_arr, arr, col, i, num):
